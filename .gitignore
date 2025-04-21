@@ -91,3 +91,5 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+sample_data/*/
+sample_data/*.zip
