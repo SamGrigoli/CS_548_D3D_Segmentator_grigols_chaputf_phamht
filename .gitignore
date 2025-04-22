@@ -95,3 +95,4 @@ sample_data/adni_phamht_CS548
 sample_data/adni_phamht_CS548.zip
 sample_data/shared_data.zip
 sample_data/shared_data/ *
+sample_data\shared_data\shared_data
