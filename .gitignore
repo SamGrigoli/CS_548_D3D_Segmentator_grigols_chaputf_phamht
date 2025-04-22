@@ -62,3 +62,36 @@ target/
 .ipynb_checkpoints
 
 bin/
+
+# MacOSX Stuff
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+sample_data/adni_phamht_CS548
+sample_data/adni_phamht_CS548.zip
+sample_data/shared_data.zip
+sample_data/shared_data/ *
