@@ -131,5 +131,3 @@ for i, (series_id, dicom_files) in enumerate(series_dict.items()):
         print(f"Error converting series: {e}")
 
 print("\nConversion complete!")
-print("Try each version in your segmentation tool to find which size works best.")
-print("Once you find the best size, you can modify the CUSTOM_DIMENSIONS list to create only that version.")
