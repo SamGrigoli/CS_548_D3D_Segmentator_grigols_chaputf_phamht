@@ -1,0 +1,3 @@
+# Path to the root directory containing multiple DICOM folders
+root_dicom_dir = "C:/Users/samgr/OneDrive/Desktop/MRI/CS_548_D3D_Segmentator_grigols_chaputf_phamht/sample_data/Images/ST000001"
+output_dir = "C:/Users/samgr/OneDrive/Desktop/MRI/CS_548_D3D_Segmentator_grigols_chaputf_phamht/visuals"
