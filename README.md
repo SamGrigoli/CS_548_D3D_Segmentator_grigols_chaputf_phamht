@@ -21,14 +21,21 @@ The goal is to provide a complementary tool to the already available brain tissu
 | Package                                        | Tested version |
 |------------------------------------------------|----------------|
 | [matplotlib](http://matplotlib.org/)           | 3.1.1          |
-| [NumPy](http://www.numpy.org/)                 | 1.22.0         |
+| [NumPy](http://www.numpy.org/)                 | 1.17.2         |
 | [NiBabel](http://nipy.org/nibabel/)            | 2.5.1          |
 | [SciPy](http://scipy.org/)                     | 1.3.1          |
 | [Compoda](https://github.com/ofgulban/compoda) | 0.3.5          |
 
 ## Installation & Quick Start
 - Download [the latest release](https://github.com/ofgulban/segmentator/releases) and unzip it.
-- Change directory in your command line:
+
+```
+Create python environment (miniconda) using the following commands:
+```
+conda create -n Segementator python=3.6
+conda activate Segmentator
+```
+Change directory in your command line:
 ```
 cd /path/to/segmentator
 ```
