@@ -28,11 +28,13 @@ The goal is to provide a complementary tool to the already available brain tissu
 
 ## Installation & Quick Start
 - Download [the latest release](https://github.com/ofgulban/segmentator/releases) and unzip it.
-
+- Run miniconda as administrator
 ```
 Create python environment (miniconda) using the following commands:
 ```
 conda create -n Segementator python=3.6
+```
+Activate python 
 conda activate Segmentator
 ```
 Change directory in your command line:
