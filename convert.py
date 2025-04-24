@@ -5,9 +5,11 @@ import nibabel as nib
 from glob import glob
 from nilearn.image import resample_img
 
-# Path to the root directory containing multiple DICOM folders
-root_dicom_dir = r"C:\Users\samgr\OneDrive\Desktop\MRI\CS_548_D3D_Segmentator_grigols_chaputf_phamht\sample_data\Images\ST000001"
-output_dir = r"C:\Users\samgr\OneDrive\Desktop\MRI\CS_548_D3D_Segmentator_grigols_chaputf_phamht\sample_data\nifti_output"
+script_dir = os.path.dirname(os.path.abspath(__file__))
+
+# Make directory and output for nii.gz files relative
+root_dicom_dir = os.path.join(script_dir, "sample_data", "Images", "ST000001")
+output_dir = os.path.join(script_dir, "sample_data", "nifti_output")
 
 # Create output directory if it doesn't exist
 os.makedirs(output_dir, exist_ok=True)
