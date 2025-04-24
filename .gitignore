@@ -91,3 +91,8 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+sample_data/*
+.vscode/c_cpp_properties.json
+.vscode/launch.json
+.vscode/settings.json
