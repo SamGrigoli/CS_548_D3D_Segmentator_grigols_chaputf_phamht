@@ -96,3 +96,5 @@ sample_data/*
 .vscode/c_cpp_properties.json
 .vscode/launch.json
 .vscode/settings.json
+input_dir/*
+output_dir/*
