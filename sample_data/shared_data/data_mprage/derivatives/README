@@ -1,0 +1,19 @@
+Notes
+-----
+ITK-Snap 3.6.0 is used to register different images, create subcortical/cerebellum masks and manually segment the gray matter. FSL 5.0.9 with BET v2.1 is used to create brain masks.
+
+The 'ground truth' gray matter segmentations are labeled with version numbers depending on the number of iterations performed to get a subjectively satisfactory gray matter delineations. If there are further iterations to 'polish' the gray matter segmentations, these version numbers will be incremented.
+
+Nature of the data
+------------------
+* gm_v??: gray matter ground truth; 1 for gray matter, 0 elsewhere
+* artifact_mask_T2star: mask for susceptibility artifact-affected regions in T2*w image; 1 for artifact regions, 0 elsewhere
+* brain_mask: mask for the brain; 1 for brain, 0 elsewhere
+* brain_mask_nosub: mask for cerebrum, excluding cerebellum and brain stem; 1 for cerebrum, 0 elsewhere
+
+Processing scripts
+------------------
+Further processing scripts are available at:
+https://github.com/MSchnei/segmentator_processing_scripts
+with the DOI
+https://zenodo.org/record/1098294
