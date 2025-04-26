@@ -50,15 +50,15 @@ import nibabel as nib
 import matplotlib.pyplot as plt
 import numpy as np
 
-# 1. Define correct paths (adjust these to match your actual paths)
+# path handling
 base_dir = "c:/Code_class/CS_548_D3D_Segmentator_grigols_chaputf_phamht-1/sample_data/shared_data/shared_data/data_mprage"
 input_files = {
-    "t1": os.path.join(base_dir, "sub-02/anat/sub-02_T1w_defaced.nii.gz"),
-    "truth": os.path.join(base_dir, "derivatives/sub-02/ground_truth/sub-02_gm_v06.nii.gz"),
-    "seg": "segmentation.nii.gz"  # Output from previous step
+    "t1": os.path.join(base_dir, "sub-02/anat/sub-02_T1w_defaced.nii.gz"), #original
+    "truth": os.path.join(base_dir, "derivatives/sub-02/ground_truth/sub-02_gm_v06.nii.gz"), #truth ground
+    "seg": "segmentation.nii.gz"  #segmentation file
 }
 
-# 2. Verify all files exist
+# files exist
 missing_files = [name for name, path in input_files.items() if not os.path.exists(path)]
 if missing_files:
     print("ERROR: Missing files:")
@@ -67,12 +67,12 @@ if missing_files:
     print("\nCurrent directory contents:", os.listdir('.'))
     exit()
 
-# 3. Load verified files
+#Load files
 t1 = nib.load(input_files["t1"]).get_fdata()
 truth = nib.load(input_files["truth"]).get_fdata()
 seg = nib.load(input_files["seg"]).get_fdata()
 
-# 4. Visualization (same as before)
+# visual
 slice_idx = truth.shape[2] // 2
 plt.figure(figsize=(15, 5))
 
