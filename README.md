@@ -48,6 +48,14 @@ segmentator /path/to/file.nii.gz
 ```
 segmentator --help
 ```
+**Note**
+Since the repository is not actively maintained and may be outdated for modern environments, you may encounter dependency issues when installing from the original requirements.txt.
+
+To address this, an updated requirements file requirements_update.txt has been provided.
+If installing with the original file fails, try:
+Install the updated requirements:
+pip install -r requirements_update.txt
+```
 
 Check out __[our wiki](https://github.com/ofgulban/segmentator/wiki)__ for further details such as [GUI controls](https://github.com/ofgulban/segmentator/wiki/Controls), [alternative installation methods](https://github.com/ofgulban/segmentator/wiki/Installation) and more...
 
