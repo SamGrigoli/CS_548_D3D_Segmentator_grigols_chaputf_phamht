@@ -1,93 +1,149 @@
-'''import nibabel as nib
-import numpy as np
-from sklearn.cluster import KMeans
-from scipy import ndimage
-
-def segment_t1(t1_path, mask_path=None, n_clusters=3):
-    # Load T1 image and optional mask
-    t1_img = nib.load(t1_path)
-    t1_data = t1_img.get_fdata()
-    
-    # If no mask is provided, create a simple intensity-based mask
-    if mask_path:
-        mask = nib.load(mask_path).get_fdata() > 0
-    else:
-        mask = t1_data > np.percentile(t1_data, 10)  # Simple threshold
-    
-    # Prepare data for clustering (normalize intensities)
-    masked_data = t1_data[mask].reshape(-1, 1)
-    normalized_data = (masked_data - np.mean(masked_data)) / np.std(masked_data)
-    
-    # K-means clustering (GM=1, WM=2, CSF=0)
-    kmeans = KMeans(n_clusters=n_clusters, random_state=0).fit(normalized_data)
-    labels = kmeans.labels_
-    
-    # Assign clusters to tissues (reorder based on intensity)
-    cluster_means = [np.mean(masked_data[labels == i]) for i in range(n_clusters)]
-    sorted_clusters = np.argsort(cluster_means)  # CSF (darkest) -> GM -> WM (brightest)
-    
-    # Create segmentation map
-    seg_data = np.zeros_like(t1_data)
-    seg_data[mask] = sorted_clusters[labels]  # 0=CSF, 1=GM, 2=WM
-    
-    # Save results
-    seg_img = nib.Nifti1Image(seg_data, t1_img.affine)
-    nib.save(seg_img, "segmentation.nii.gz")
-    print("Segmentation saved to segmentation.nii.gz")
-
-# Example usage
-segment_t1("C:/Code_class/CS_548_D3D_Segmentator_grigols_chaputf_phamht-1/sample_data/shared_data/shared_data/data_mprage/sub-02/anat/sub-02_T1w_defaced.nii.gz", mask_path="C:/Code_class/CS_548_D3D_Segmentator_grigols_chaputf_phamht-1/sample_data/shared_data/shared_data/data_mprage/derivatives/sub-02/masks/sub-02_brain_mask.nii.gz")'''
-'''import nibabel as nib
-import matplotlib.pyplot as plt
-
-seg = nib.load("segmentation.nii.gz").get_fdata()
-plt.imshow(seg[:, :, seg.shape[2]//2], cmap="jet")  # Mid-slice
-plt.colorbar(label="0=CSF, 1=GM, 2=WM")
-plt.savefig("segmentation_check.png")'''
-
+'''
+Rosaline Pham
+Description: This is an interactive simple Python for visualizing and segmenting NIfTI brain scans. 
+It supports both multi-file comparisons (T1 + segmentation + ground truth) and single-file segmentation using KMeans clustering. 
+Output images are saved automatically with unique filenames, and errors are handled for user inputs
+'''
+# All imports go here
 import os
+import numpy as np
 import nibabel as nib
 import matplotlib.pyplot as plt
-import numpy as np
+from sklearn.cluster import KMeans
 
-# path handling
-base_dir = "c:/Code_class/CS_548_D3D_Segmentator_grigols_chaputf_phamht-1/sample_data/shared_data/shared_data/data_mprage"
-input_files = {
-    "t1": os.path.join(base_dir, "sub-02/anat/sub-02_T1w_defaced.nii.gz"), #original
-    "truth": os.path.join(base_dir, "derivatives/sub-02/ground_truth/sub-02_gm_v06.nii.gz"), #truth ground
-    "seg": "segmentation.nii.gz"  #segmentation file
-}
+# Helper function to create unique filenames in a given output directory
+def get_unique_filename(base_name, output_dir=None):
+    if output_dir:
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+        path = os.path.join(output_dir, base_name)
+    else:
+        path = base_name  # Save in current working directory
 
-# files exist
-missing_files = [name for name, path in input_files.items() if not os.path.exists(path)]
-if missing_files:
-    print("ERROR: Missing files:")
-    for name in missing_files:
-        print(f"- {name}: {input_files[name]}")
-    print("\nCurrent directory contents:", os.listdir('.'))
-    exit()
+    count = 1
+    name, ext = os.path.splitext(path)
+    new_name = f"{name}_{count}{ext}"
+    while os.path.exists(new_name):
+        count += 1
+        new_name = f"{name}_{count}{ext}"
+    return new_name
 
-#Load files
-t1 = nib.load(input_files["t1"]).get_fdata()
-truth = nib.load(input_files["truth"]).get_fdata()
-seg = nib.load(input_files["seg"]).get_fdata()
+while True:
+    # menu
+    print("\n--- What do you want to do? ---")
+    print("1. Compare a T1 + Segmentation + Ground Truth (Case 1)")
+    print("2. Segment a single NIfTI file (Case 2)")
+    print("Type 'exit' to quit.")
+    
+    choice = input("Enter 1, 2, or 'exit': ").strip()
 
-# visual
-slice_idx = truth.shape[2] // 2
-plt.figure(figsize=(15, 5))
+    if choice.lower() == 'exit':
+        print("Exiting program. Goodbye!")
+        break
 
-plt.subplot(131)
-plt.imshow(t1[:,:,slice_idx], cmap='gray')
-plt.title("Original T1")
+    if choice not in ['1', '2']:
+        print("Invalid choice. Please enter 1, 2, or 'exit'.")
+        continue
 
-plt.subplot(132)
-plt.imshow(seg[:,:,slice_idx] == 2, cmap='Blues')
-plt.title("Your Segmentation (GM)")
+    # Ask user where to save results
+    save_dir = input("\nEnter full path to the directory where you want to save output files (or press Enter to save in current folder): ").strip()
+    if not save_dir:
+        save_dir = None  # Auto fallback to current working directory
 
-plt.subplot(133)
-plt.imshow(truth[:,:,slice_idx], cmap='Reds')
-plt.title("Ground Truth")
+    elif not os.path.exists(save_dir):
+        print(f"The directory '{save_dir}' does not exist. Creating it...")
+        os.makedirs(save_dir)
 
-plt.tight_layout()
-plt.savefig("segmentation_vs_truth.png")
-print("Successfully created comparison plot")
+    # case 1
+    if choice == '1':
+        print("\nYou selected Case 1: Provide three files (T1, Segmentation, Ground Truth).")
+
+        t1_path = input("Enter full path to the T1 original file (.nii.gz): ").strip()
+        seg_path = input("Enter full path to your Segmentation file (.nii.gz): ").strip()
+        truth_path = input("Enter full path to the Ground Truth file (.nii.gz): ").strip()
+
+        # files exist
+        input_files = {"T1": t1_path, "Segmentation": seg_path, "Ground Truth": truth_path}
+        missing_files = [name for name, path in input_files.items() if not os.path.exists(path)]
+
+        if missing_files:
+            print("ERROR: Missing files:")
+            for name in missing_files:
+                print(f"- {name}: {input_files[name]}")
+            continue
+
+        # Load files
+        try:
+            t1 = nib.load(t1_path).get_fdata()
+            seg = nib.load(seg_path).get_fdata()
+            truth = nib.load(truth_path).get_fdata()
+
+            # Visuals
+            slice_idx = truth.shape[2] // 2
+            plt.figure(figsize=(15, 5))
+
+            plt.subplot(131)
+            plt.imshow(t1[:, :, slice_idx], cmap='gray')
+            plt.title("Original T1")
+
+            plt.subplot(132)
+            plt.imshow(seg[:, :, slice_idx] == 2, cmap='Blues')
+            plt.title("Your Segmentation (GM)")
+
+            plt.subplot(133)
+            plt.imshow(truth[:, :, slice_idx], cmap='Reds')
+            plt.title("Ground Truth")
+
+            plt.tight_layout()
+            save_filename = get_unique_filename("segmentation_vs_truth.png", output_dir=save_dir)
+            plt.savefig(save_filename, dpi=300)
+            plt.close()
+            print(f"Successfully created comparison plot at '{os.path.abspath(save_filename)}'.")
+
+        except Exception as e:
+            print(f"Processing failed: {str(e)}")
+            continue
+
+    # case 2
+    elif choice == '2':
+        print("\nYou selected Case 2: Provide a single file to segment.")
+
+        file_path = input("Enter full path to the single NIfTI file (.nii.gz): ").strip()
+
+        if not os.path.exists(file_path):
+            print(f"ERROR: The provided file does not exist:\n{file_path}")
+            continue
+
+        # Load and process
+        try:
+            img = nib.load(file_path)
+            data = img.get_fdata()
+
+            # segmentation using KMeans clustering
+            mask = data > np.percentile(data[data > 0], 10)
+            kmeans = KMeans(n_clusters=3, random_state=0, n_init=10).fit(data[mask].reshape(-1, 1))
+            seg = np.zeros_like(data)
+            seg[mask] = kmeans.labels_ + 1  # 1=CSF, 2=GM, 3=WM
+
+            # visuals
+            slice_idx = data.shape[2] // 2
+            plt.figure(figsize=(12, 6))
+
+            plt.subplot(121)
+            plt.imshow(data[:, :, slice_idx], cmap='gray')
+            plt.title("Original Scan")
+
+            plt.subplot(122)
+            plt.imshow(seg[:, :, slice_idx], cmap='jet')
+            plt.title("Segmentation")
+            plt.colorbar(label="1=CSF, 2=GM, 3=WM")
+
+            plt.tight_layout()
+            save_filename = get_unique_filename("segmentation_result.png", output_dir=save_dir)
+            plt.savefig(save_filename, dpi=300)
+            plt.close()
+            print(f"Success! Results saved to:\n{os.path.abspath(save_filename)}")
+
+        except Exception as e:
+            print(f"Processing failed: {str(e)}")
+            continue

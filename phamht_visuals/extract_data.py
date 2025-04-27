@@ -1,50 +1,46 @@
-import os
-import nibabel as nib
+'''import nibabel as nib
 import numpy as np
-import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
+from scipy import ndimage
 
-#path handling
-base_dir = r"path\to\directory"
-input_file = r"path\to\niiz\file"  
+def segment_t1(t1_path, mask_path=None, n_clusters=3):
+    # Load T1 image and optional mask
+    t1_img = nib.load(t1_path)
+    t1_data = t1_img.get_fdata()
+    
+    # If no mask is provided, create a simple intensity-based mask
+    if mask_path:
+        mask = nib.load(mask_path).get_fdata() > 0
+    else:
+        mask = t1_data > np.percentile(t1_data, 10)  # Simple threshold
+    
+    # Prepare data for clustering (normalize intensities)
+    masked_data = t1_data[mask].reshape(-1, 1)
+    normalized_data = (masked_data - np.mean(masked_data)) / np.std(masked_data)
+    
+    # K-means clustering (GM=1, WM=2, CSF=0)
+    kmeans = KMeans(n_clusters=n_clusters, random_state=0).fit(normalized_data)
+    labels = kmeans.labels_
+    
+    # Assign clusters to tissues (reorder based on intensity)
+    cluster_means = [np.mean(masked_data[labels == i]) for i in range(n_clusters)]
+    sorted_clusters = np.argsort(cluster_means)  # CSF (darkest) -> GM -> WM (brightest)
+    
+    # Create segmentation map
+    seg_data = np.zeros_like(t1_data)
+    seg_data[mask] = sorted_clusters[labels]  # 0=CSF, 1=GM, 2=WM
+    
+    # Save results
+    seg_img = nib.Nifti1Image(seg_data, t1_img.affine)
+    nib.save(seg_img, "segmentation.nii.gz")
+    print("Segmentation saved to segmentation.nii.gz")
 
-# Construct full path safely
-input_path = os.path.normpath(os.path.join(base_dir, input_file))
+# Example usage
+segment_t1("C:/Code_class/CS_548_D3D_Segmentator_grigols_chaputf_phamht-1/sample_data/shared_data/shared_data/data_mprage/sub-02/anat/sub-02_T1w_defaced.nii.gz", mask_path="C:/Code_class/CS_548_D3D_Segmentator_grigols_chaputf_phamht-1/sample_data/shared_data/shared_data/data_mprage/derivatives/sub-02/masks/sub-02_brain_mask.nii.gz")'''
+'''import nibabel as nib
+import matplotlib.pyplot as plt
 
-#file exists
-if not os.path.exists(input_path):
-    print(f"ERROR: File not found at:\n{input_path}")
-    print("\nDirectory contents:")
-    print(*os.listdir(base_dir), sep='\n')
-    exit()
-
-#load and process data
-try:
-    img = nib.load(input_path)
-    data = img.get_fdata()
-    
-    #segmentation (can be modified)
-    mask = data > np.percentile(data[data > 0], 10)
-    kmeans = KMeans(n_clusters=3).fit(data[mask].reshape(-1, 1))
-    seg = np.zeros_like(data)
-    seg[mask] = kmeans.labels_ + 1  # 1=CSF, 2=GM, 3=WM
-
-    #visual
-    slice_idx = data.shape[2] // 2
-    plt.figure(figsize=(12, 6))
-    
-    plt.subplot(121)
-    plt.imshow(data[:, :, slice_idx], cmap='gray')
-    plt.title("Original Scan")
-    
-    plt.subplot(122)
-    plt.imshow(seg[:, :, slice_idx], cmap='jet')
-    plt.title("Segmentation")
-    plt.colorbar(label="1=CSF, 2=GM, 3=WM")
-    
-    plt.savefig("segmentation_result.png", dpi=300)
-    print(f"Success! Results saved to:\n{os.path.abspath('segmentation_result.png')}")
-    
-except Exception as e:
-    print(f"Processing failed: {str(e)}")
-    
+seg = nib.load("segmentation.nii.gz").get_fdata()
+plt.imshow(seg[:, :, seg.shape[2]//2], cmap="jet")  # Mid-slice
+plt.colorbar(label="0=CSF, 1=GM, 2=WM")
+plt.savefig("segmentation_check.png")'''
