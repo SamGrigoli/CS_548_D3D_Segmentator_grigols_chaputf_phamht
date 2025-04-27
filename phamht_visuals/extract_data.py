@@ -56,13 +56,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-'''import SimpleITK as sitk
-
-t1_img = sitk.ReadImage(r'C:\Code_class\CS_548_D3D_Segmentator_grigols_chaputf_phamht-1\sample_data\shared_data\shared_data\data_mprage\sub-02\anat\sub-02_T1w_defaced.nii.gz')
-brain_mask = sitk.ReadImage(r'C:\Code_class\CS_548_D3D_Segmentator_grigols_chaputf_phamht-1\sample_data\shared_data\shared_data\data_mprage\derivatives\sub-02\masks\sub-02_brain_mask.nii.gz')
-
-brain_extracted = sitk.Mask(t1_img, brain_mask)
-
-sitk.WriteImage(brain_extracted, r'C:\Code_class\CS_548_D3D_Segmentator_grigols_chaputf_phamht-1\sample_data\shared_data\shared_data\data_mprage\sub-02\anat\sub2.nii.gz')
-
-'''
