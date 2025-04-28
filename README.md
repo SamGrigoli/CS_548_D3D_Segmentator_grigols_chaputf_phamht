@@ -14,8 +14,8 @@ The goal is to provide a complementary tool to the already available brain tissu
 - Released versions of this package can be cited by using our __[Zenodo DOI](https://zenodo.org/badge/latestdoi/59303623).__
 
 ### Data Citation:
-- The data can be accessed from __[this link.](https://doi.org/10.34894/E0U32Q)__
-- Citation: Hugo J. Kuijf; Edwin Bennink; Koen L. Vincken; Nick Weaver; Geert Jan Biessels; Max A. Viergever, 2024, "MR Brain Segmentation Challenge 2018 Data", https://doi.org/10.34894/E0U32Q, DataverseNL, V1
+-The dataset used for developing Segmentator can be found from __[this link.](https://doi.org/10.5281/zenodo.1117858)__
+- The data for testing the resampling be accessed from __[this link.](https://doi.org/10.34894/E0U32Q)__
 
 <img src="visuals/animation_01.gif" width=840 align="center" />
 
@@ -64,6 +64,20 @@ segmentator --help
 ```
 
 Check out __[our wiki](https://github.com/ofgulban/segmentator/wiki)__ for further details such as [GUI controls](https://github.com/ofgulban/segmentator/wiki/Controls), [alternative installation methods](https://github.com/ofgulban/segmentator/wiki/Installation) and more...
+
+## Resampler instructions
+
+- review current configs found at top of resample_stretch.py and isotropic_resample.py
+- run script as standalone:
+
+```
+resample_stretch.py
+```
+OR
+
+```
+isotropic_resample.py
+```
 
 ## Support
 Please use [GitHub issues](https://github.com/ofgulban/segmentator/issues) for questions, bug reports or feature requests.
