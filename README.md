@@ -15,7 +15,7 @@ This is a **forked version** of the original Segmentator repository, created as 
 ---
 
 ## About This Fork
-This fork modifies the original Segmentator package to support additional datasets (including 1.5T and 3T MRIs) and provides updated scripts for preprocessing and easier dataset handling.
+This fork modifies the original Segmentator package to support additional datasets (including 1.5T and 3T MRIs) and provides updated scripts for preprocessing and easier dataset handling. Finishing commit on 4/27/2025 at 11:47 pm.
 
 **Key Modifications:**
 - Added convert.py to resample and standardize different MRI datasets for compatibility with Segmentator.
