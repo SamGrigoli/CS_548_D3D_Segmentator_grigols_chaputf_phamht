@@ -31,7 +31,6 @@ This fork modifies the original Segmentator package to support additional datase
 
 ### Datasets Used:
 - **7T MRI:** Original dataset from Segmentator project: [https://doi.org/10.5281/zenodo.1117858](https://doi.org/10.5281/zenodo.1117858)
-- **3T MRI:** Custom clinical scans converted from DICOM format was extracted from: [https://doi.org/10.48550/arXiv.2302.09200] (https://doi.org/10.48550/arXiv.2302.09200)
 - **3T MRI:** Custom clinical scans converted from DICOM format can be found at(only SUNYIT have access): [https://drive.google.com/file/d/134v9LlZ_-6xa1o0kUPd3DjN95rFsheB4/view?usp=sharing](https://drive.google.com/file/d/134v9LlZ_-6xa1o0kUPd3DjN95rFsheB4/view?usp=sharing) 
 - **1.5T MRI:** Public Kaggle dataset: [Brain Cancer MRI Dataset](https://www.kaggle.com/datasets/unidatapro/brain-cancer-dataset)
 
@@ -39,8 +38,17 @@ This fork modifies the original Segmentator package to support additional datase
 1. Visit the Kaggle page: [Brain Cancer MRI Dataset](https://www.kaggle.com/datasets/unidatapro/brain-cancer-dataset)
 2. Download and extract the dataset to a desired directory on your system.
 
----
-
+### How to Acquire 3T Dataset:
+1. Access the database through provided DOI [https://doi.org/10.48550/arXiv.2302.09200] (https://doi.org/10.48550/arXiv.2302.09200)
+2. Download the dataset containing MRI scans in DICOM (.dcm) format.
+3. Convert the DICOM files to NIfTI (.nii.gz) format using dcm2niix: 
+```
+Command
+dcm2niix -z y -o output_folder_path input_dicom_folder
+```
+4. Use the generated .nii.gz files for segmentation and evaluation experiments.
+5. 
+----
 ## Installation & Setup
 
 This project is compatible with **Python 3.6**.
