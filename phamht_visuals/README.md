@@ -14,10 +14,12 @@ run this following command to use: python path\to\segment.py
 ** extract_data.py
 A Python-based tool designed to quantitatively evaluate segmentation results against ground truth labels using metrics like Dice Coefficient and Average Surface Distance (AVHD).
 
+For more precise and standardized evaluation results as in the paper (https://doi.org/10.1371/journal.pone.0198335), we recommend using the EvaluateSegmentation tool (version 5.2.5, 2016), developed as part of the VISCERAL project http://www.visceral.eu.
+
 run this following command to use: python path\to\extract_data.py
 
 ***Note***
-In the original paper, the authors used MATLAB and FSL for segmentation and evaluation. This Python implementation serves as a convenient workaround but may produce mismatched or less precise results compared to the original methods.
+In the original paper, the authors used MATLAB, FSL and CBS to for segmentation and evaluation. This Python implementation serves as a convenient workaround but may produce mismatched or less precise results compared to the original methods.
 
 Core Dependencies
 Python 3.8+ 
