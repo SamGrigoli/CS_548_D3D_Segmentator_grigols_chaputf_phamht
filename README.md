@@ -47,7 +47,7 @@ Command
 dcm2niix -z y -o output_folder_path input_dicom_folder
 ```
 4. Use the generated .nii.gz files for segmentation and evaluation experiments.
-5. 
+
 ----
 ## Installation & Setup
 
@@ -129,7 +129,8 @@ segmentator --help
 ## Citation
 - Paper: [PLoS ONE Publication](https://doi.org/10.1371/journal.pone.0198335)
 - Software: [Zenodo DOI](https://zenodo.org/badge/latestdoi/59303623)
-
+- Dataset for resampling: [citation: Hugo J. Kuijf; Edwin Bennink; Koen L. Vincken; Nick Weaver; Geert Jan Biessels; Max A. Viergever,"MR Brain Segmentation Challenge 2018 Data", 2024 DataverseNL, https://doi.org/10.34894/E0U32Q, V1] 
+(citation: Hugo J. Kuijf; Edwin Bennink; Koen L. Vincken; Nick Weaver; Geert Jan Biessels; Max A. Viergever,"MR Brain Segmentation Challenge 2018 Data", 2024 DataverseNL, https://doi.org/10.34894/E0U32Q, V1)
 ---
 
 ## Resampler instructions
