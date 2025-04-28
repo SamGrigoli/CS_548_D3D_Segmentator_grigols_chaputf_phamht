@@ -55,6 +55,25 @@ To address this, an updated requirements file requirements_update.txt has been p
 If installing with the original file fails, try:
 Install the updated requirements:
 pip install -r requirements_update.txt
+
+## How to run convert.py
+- Change directory in your command line:
+```
+cd /path/to/segmentator
+```
+- Run convert.py:
+```
+python convert.py
+```
+## How to run files using the segmentator tool
+
+- Change directory in your command line:
+```
+cd sample_data/images/nifti_output
+```
+- Run your selected nii.gz file
+```
+segmentator "name of selected file" 
 ```
 
 Check out __[our wiki](https://github.com/ofgulban/segmentator/wiki)__ for further details such as [GUI controls](https://github.com/ofgulban/segmentator/wiki/Controls), [alternative installation methods](https://github.com/ofgulban/segmentator/wiki/Installation) and more...
