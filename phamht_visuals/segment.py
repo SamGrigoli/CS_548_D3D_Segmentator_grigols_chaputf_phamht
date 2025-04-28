@@ -1,15 +1,15 @@
 '''
 Rosaline Pham
-Description: This is an interactive simple Python for visualizing and segmenting NIfTI brain scans. 
-It supports both multi-file comparisons (T1 + segmentation + ground truth) and single-file segmentation using KMeans clustering. 
-Output images are saved automatically with unique filenames, and errors are handled for user inputs
+Description: This is an interactive simple Python for visualizing and segmenting NIfTI brain scans.
+It supports both multi-file comparisons (T1 + segmentation + ground truth) and single-file segmentation using KMeans clustering.
+Output images are saved automatically with unique filenames, and errors are handled for user inputs.
 '''
 # All imports go here
 import os
 import numpy as np
 import nibabel as nib
 import matplotlib.pyplot as plt
-from sklearn.cluster import KMeans
+from sklearn.cluster import MiniBatchKMeans
 
 # unique filename
 def get_unique_filename(base_name, output_dir=None):
@@ -18,7 +18,7 @@ def get_unique_filename(base_name, output_dir=None):
             os.makedirs(output_dir)
         path = os.path.join(output_dir, base_name)
     else:
-        path = base_name  # auto save in current directory
+        path = base_name
 
     count = 1
     name, ext = os.path.splitext(path)
@@ -34,7 +34,7 @@ while True:
     print("1. Compare a T1 + Auto-Segmentation + Ground Truth (Case 1)")
     print("2. Segment a single NIfTI file (Case 2)")
     print("Type 'exit' to quit.")
-    
+
     choice = input("Enter 1, 2, or 'exit': ").strip()
 
     if choice.lower() == 'exit':
@@ -48,11 +48,30 @@ while True:
     # prompt save results path
     save_dir = input("\nEnter full path to the directory where you want to save output files (or press Enter to save in current folder): ").strip()
     if not save_dir:
-        save_dir = None  #fallback to current directory
-
+        save_dir = None
     elif not os.path.exists(save_dir):
         print(f"The directory '{save_dir}' does not exist. Creating it...")
         os.makedirs(save_dir)
+
+    # common segmentation function
+    def segment_brain(img_data):
+        mask = img_data > np.percentile(img_data[img_data > 0], 10)
+        masked_data = img_data[mask].reshape(-1, 1)
+        normalized_data = (masked_data - np.mean(masked_data)) / np.std(masked_data)
+
+        kmeans = MiniBatchKMeans(n_clusters=3, random_state=0, batch_size=5000).fit(normalized_data)
+        labels = kmeans.labels_
+
+        cluster_means = [np.mean(masked_data[labels == i]) for i in range(3)]
+        sort_idx = np.argsort(cluster_means)
+
+        new_labels = np.zeros_like(labels)
+        for new_label, old_label in enumerate(sort_idx):
+            new_labels[labels == old_label] = new_label
+
+        seg_data = np.zeros_like(img_data)
+        seg_data[mask] = new_labels
+        return seg_data
 
     # case 1: generate segmentation from original t1 and compare to ground_truth
     if choice == '1':
@@ -61,7 +80,6 @@ while True:
         t1_path = input("Enter full path to the T1 original file (.nii.gz): ").strip()
         truth_path = input("Enter full path to the Ground Truth file (.nii.gz): ").strip()
 
-        # files exist
         input_files = {"T1": t1_path, "Ground Truth": truth_path}
         missing_files = [name for name, path in input_files.items() if not os.path.exists(path)]
 
@@ -72,30 +90,12 @@ while True:
             continue
 
         try:
-            # T1 and ground_truth
             t1_img = nib.load(t1_path)
             t1_data = t1_img.get_fdata()
             truth = nib.load(truth_path).get_fdata()
 
-            # generate segmentation
-            mask = t1_data > np.percentile(t1_data, 10)
-            masked_data = t1_data[mask].reshape(-1, 1)
-            normalized_data = (masked_data - np.mean(masked_data)) / np.std(masked_data)
+            seg_data = segment_brain(t1_data)
 
-            kmeans = KMeans(n_clusters=3, random_state=0, n_init=10).fit(normalized_data)
-            labels = kmeans.labels_
-
-            cluster_means = [np.mean(masked_data[labels == i]) for i in range(3)]
-            sort_idx = np.argsort(cluster_means)
-
-            new_labels = np.zeros_like(labels)
-            for new_label, old_label in enumerate(sort_idx):
-                new_labels[labels == old_label] = new_label
-
-            seg_data = np.zeros_like(t1_data)
-            seg_data[mask] = new_labels
-
-            # visual
             slice_idx = truth.shape[2] // 2
             plt.figure(figsize=(15, 5))
 
@@ -104,8 +104,8 @@ while True:
             plt.title("Original T1")
 
             plt.subplot(132)
-            plt.imshow(seg_data[:, :, slice_idx] == 1, cmap='Blues')  # 1=GM
-            plt.title("Generated Segmentation (GM)")
+            plt.imshow(seg_data[:, :, slice_idx] == 1, cmap='Blues')
+            plt.title("Generated Segmentation (GM Only)")
 
             plt.subplot(133)
             plt.imshow(truth[:, :, slice_idx], cmap='Reds')
@@ -121,7 +121,7 @@ while True:
             print(f"Processing failed: {str(e)}")
             continue
 
-    # segment a single scan with 1 niiz file
+    # case 2: segment a single scan
     elif choice == '2':
         print("\nYou selected Case 2: Provide a single file to segment.")
 
@@ -135,22 +135,7 @@ while True:
             img = nib.load(file_path)
             data = img.get_fdata()
 
-            mask = data > np.percentile(data[data > 0], 10)
-            masked_data = data[mask].reshape(-1, 1)
-            normalized_data = (masked_data - np.mean(masked_data)) / np.std(masked_data)
-
-            kmeans = KMeans(n_clusters=3, random_state=0, n_init=10).fit(normalized_data)
-            labels = kmeans.labels_
-
-            cluster_means = [np.mean(masked_data[labels == i]) for i in range(3)]
-            sort_idx = np.argsort(cluster_means)
-
-            new_labels = np.zeros_like(labels)
-            for new_label, old_label in enumerate(sort_idx):
-                new_labels[labels == old_label] = new_label
-
-            seg = np.zeros_like(data)
-            seg[mask] = new_labels
+            seg_data = segment_brain(data)
 
             slice_idx = data.shape[2] // 2
             plt.figure(figsize=(12, 6))
@@ -160,9 +145,8 @@ while True:
             plt.title("Original Scan")
 
             plt.subplot(122)
-            plt.imshow(seg[:, :, slice_idx], cmap='jet')
-            plt.title("Segmentation")
-            plt.colorbar(label="0=CSF, 1=GM, 2=WM")
+            plt.imshow(seg_data[:, :, slice_idx] == 1, cmap='Blues')
+            plt.title("Segmentation (GM Only)")
 
             plt.tight_layout()
             save_filename = get_unique_filename("segmentation_result.png", output_dir=save_dir)
@@ -173,4 +157,3 @@ while True:
         except Exception as e:
             print(f"Processing failed: {str(e)}")
             continue
-
