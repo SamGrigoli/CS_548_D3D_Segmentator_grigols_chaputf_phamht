@@ -21,13 +21,23 @@ The goal is to provide a complementary tool to the already available brain tissu
 | Package                                        | Tested version |
 |------------------------------------------------|----------------|
 | [matplotlib](http://matplotlib.org/)           | 3.1.1          |
-| [NumPy](http://www.numpy.org/)                 | 1.22.0         |
+| [NumPy](http://www.numpy.org/)                 | 1.17.2         |
 | [NiBabel](http://nipy.org/nibabel/)            | 2.5.1          |
 | [SciPy](http://scipy.org/)                     | 1.3.1          |
 | [Compoda](https://github.com/ofgulban/compoda) | 0.3.5          |
 
 ## Installation & Quick Start
 - Download [the latest release](https://github.com/ofgulban/segmentator/releases) and unzip it.
+- Run miniconda as administrator
+
+- Create python environment (miniconda) using the following command:
+```
+conda create -n Segementator python=3.6
+```
+- Activate python environment using the following command:
+```
+conda activate Segmentator
+```
 - Change directory in your command line:
 ```
 cd /path/to/segmentator
@@ -50,6 +60,20 @@ segmentator --help
 ```
 
 Check out __[our wiki](https://github.com/ofgulban/segmentator/wiki)__ for further details such as [GUI controls](https://github.com/ofgulban/segmentator/wiki/Controls), [alternative installation methods](https://github.com/ofgulban/segmentator/wiki/Installation) and more...
+
+## Resampler instructions
+
+- review current configs found at top of resample_stretch.py and isotropic_resample.py
+- run script as standalone:
+
+```
+resample_stretch.py
+```
+OR
+
+```
+isotropic_resample.py
+```
 
 ## Support
 Please use [GitHub issues](https://github.com/ofgulban/segmentator/issues) for questions, bug reports or feature requests.
