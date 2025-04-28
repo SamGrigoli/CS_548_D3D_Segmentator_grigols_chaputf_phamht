@@ -13,10 +13,6 @@ The goal is to provide a complementary tool to the already available brain tissu
 - Our paper can be accessed from __[this link.](https://doi.org/10.1371/journal.pone.0198335)__
 - Released versions of this package can be cited by using our __[Zenodo DOI](https://zenodo.org/badge/latestdoi/59303623).__
 
-### Data Citation:
--The dataset used for developing Segmentator can be found from __[this link.](https://doi.org/10.5281/zenodo.1117858)__
-- The data for testing the resampling be accessed from __[this link.](https://doi.org/10.34894/E0U32Q)__
-
 <img src="visuals/animation_01.gif" width=840 align="center" />
 
 ## Core dependencies
