@@ -22,6 +22,7 @@ This fork modifies the original Segmentator package to support additional datase
 - Added requirements_update.txt to help with environment setup and package installation for modern Python versions.
 - Added pham_visuals/segment.py to generate .png visualizations from NIfTI files (T1, segmentation, and ground truth comparisons).
 - Added pham_visuals/extract_data.py as a workaround script to manually calculate Dice and AVHD values; note that AVHD results may not be perfectly precise compared to the original FSL-based calculations.
+- Added resample_stretch.py and isotropic_resample.py to better support 1.5T dataset demension issues when running the segmentator
 - Provided clearer instructions for running Segmentator with custom datasets.
 - Updated installation and troubleshooting guidelines for better compatibility with updated Python environments.
 - Included new dataset sources and detailed processing steps for handling diverse MRI scans.
@@ -33,10 +34,12 @@ This fork modifies the original Segmentator package to support additional datase
 - **7T MRI:** Original dataset from Segmentator project: [https://doi.org/10.5281/zenodo.1117858](https://doi.org/10.5281/zenodo.1117858)
 - **3T MRI:** Custom clinical scans converted from DICOM format can be found at(only SUNYIT have access): [https://drive.google.com/file/d/134v9LlZ_-6xa1o0kUPd3DjN95rFsheB4/view?usp=sharing](https://drive.google.com/file/d/134v9LlZ_-6xa1o0kUPd3DjN95rFsheB4/view?usp=sharing) 
 - **1.5T MRI:** Public Kaggle dataset: [Brain Cancer MRI Dataset](https://www.kaggle.com/datasets/unidatapro/brain-cancer-dataset)
+- **1.5T MRI:** Public DataverseNL dataset: [MR Brain Segmentation Challenge 2018 Data](https://dataverse.nl/dataset.xhtml?persistentId=doi:10.34894/E0U32Q)
 
 ### How to Acquire 1.5T Dataset:
 1. Visit the Kaggle page: [Brain Cancer MRI Dataset](https://www.kaggle.com/datasets/unidatapro/brain-cancer-dataset)
 2. Download and extract the dataset to a desired directory on your system.
+3. Optionally, repeat steps for DataverseNL page: [MR Brain Segmentation Challenge 2018 Data](https://dataverse.nl/dataset.xhtml?persistentId=doi:10.34894/E0U32Q)
 
 ### How to Acquire 3T Dataset:
 1. Access the database through provided DOI [https://doi.org/10.48550/arXiv.2302.09200] (https://doi.org/10.48550/arXiv.2302.09200)
@@ -124,15 +127,6 @@ Or check help options:
 segmentator --help
 ```
 
----
-
-## Citation
-- Paper: [PLoS ONE Publication](https://doi.org/10.1371/journal.pone.0198335)
-- Software: [Zenodo DOI](https://zenodo.org/badge/latestdoi/59303623)
-- Dataset for resampling: [citation: Hugo J. Kuijf; Edwin Bennink; Koen L. Vincken; Nick Weaver; Geert Jan Biessels; Max A. Viergever,"MR Brain Segmentation Challenge 2018 Data", 2024 DataverseNL, https://doi.org/10.34894/E0U32Q, V1] 
-(citation: Hugo J. Kuijf; Edwin Bennink; Koen L. Vincken; Nick Weaver; Geert Jan Biessels; Max A. Viergever,"MR Brain Segmentation Challenge 2018 Data", 2024 DataverseNL, https://doi.org/10.34894/E0U32Q, V1)
----
-
 ## Resampler instructions
 
 - review current configs found at top of resample_stretch.py and isotropic_resample.py
@@ -146,6 +140,14 @@ OR
 ```
 isotropic_resample.py
 ```
+---
+
+## Citation
+- Paper: [PLoS ONE Publication](https://doi.org/10.1371/journal.pone.0198335)
+- Software: [Zenodo DOI](https://zenodo.org/badge/latestdoi/59303623)
+- Dataset for testing resampling: [Hugo J. Kuijf; Edwin Bennink; Koen L. Vincken; Nick Weaver; Geert Jan Biessels; Max A. Viergever,"MR Brain Segmentation Challenge 2018 Data", 2024 DataverseNL, https://doi.org/10.34894/E0U32Q, V1] 
+
+---
 
 ## Support
 Please use [GitHub Issues](https://github.com/ofgulban/segmentator/issues) for questions or bug reports.
