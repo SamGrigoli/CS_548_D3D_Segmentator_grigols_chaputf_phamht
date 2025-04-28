@@ -57,7 +57,7 @@ This project is compatible with **Python 3.6**.
 | Package                                        | Tested Version |
 |------------------------------------------------|----------------|
 | [matplotlib](http://matplotlib.org/)           | 3.1.1          |
-| [NumPy](http://www.numpy.org/)                 | 1.22.0         |
+| [NumPy](http://www.numpy.org/)                 | 1.17.2         |
 | [NiBabel](http://nipy.org/nibabel/)            | 2.5.1          |
 | [SciPy](http://scipy.org/)                     | 1.3.1          |
 | [Compoda](https://github.com/ofgulban/compoda) | 0.3.5          |
@@ -68,6 +68,16 @@ This project is compatible with **Python 3.6**.
 
 **1. Download the Repository:**
 - Clone or download [this forked version](https://github.com/YOURUSERNAME/segmentator) and unzip it.
+- Run miniconda as administrator
+
+- Create python environment (miniconda) using the following command:
+```
+conda create -n Segementator python=3.6
+```
+- Activate python environment using the following command:
+```
+conda activate Segmentator
+```
 
 **2. Install Requirements:**
 ```bash
@@ -121,6 +131,20 @@ segmentator --help
 - Software: [Zenodo DOI](https://zenodo.org/badge/latestdoi/59303623)
 
 ---
+
+## Resampler instructions
+
+- review current configs found at top of resample_stretch.py and isotropic_resample.py
+- run script as standalone:
+
+```
+resample_stretch.py
+```
+OR
+
+```
+isotropic_resample.py
+```
 
 ## Support
 Please use [GitHub Issues](https://github.com/ofgulban/segmentator/issues) for questions or bug reports.

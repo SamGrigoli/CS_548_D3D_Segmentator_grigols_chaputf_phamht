@@ -93,3 +93,9 @@ Temporary Items
 .apdisk
 sample_data/*/
 sample_data/phamht_CS548.zip
+sample_data/adni_phamht_CS548_converted.rar 
+.vscode/c_cpp_properties.json
+.vscode/launch.json
+.vscode/settings.json
+input_dir/*
+output_dir/*
